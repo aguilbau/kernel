@@ -8,7 +8,7 @@ switch_to_protected_mode:
 	jmp		CODE_SEG:init_protected_mode
 
 [BITS 32]
-	
+
 init_protected_mode:
 	mov		ax, DATA_SEG
 	mov		ds, ax
