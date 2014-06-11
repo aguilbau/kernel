@@ -32,7 +32,7 @@ jmp		$
 
 ; DATA
 OS_MSG:
-db		'booting os', 0
+db		'booting gilbOS', 0
 
 KERNEL_MSG:
 db		'kernel loaded', 0
