@@ -39,8 +39,7 @@ load_kernel:
 [BITS 32]
 
 begin_protected_mode:
-;	call	KERNEL_OFFSET
-	jmp		$
+	jmp		KERNEL_OFFSET
 
 ;; DATA
 
