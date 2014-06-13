@@ -2,9 +2,10 @@
 
 void		_start(void)
 {
-
+	clear_screen();
 	putstr("cacadillac");
-	scroll_up(0);
+	putstr("\nlolellol");
+	scroll_up();
 	while (1)
 		;
 }

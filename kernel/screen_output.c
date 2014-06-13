@@ -7,9 +7,9 @@ unsigned char		g_cursor_attr = 0x0a;
 void				scroll_up(int n)
 {
 	int				i;
-
-	(void) n;
 	unsigned char	*video = (unsigned char *)VIDEO_RAM + 160;
+
+	(void)n;
 
 	i = 0;
 	while (i < SCREEN_MEM_SIZE - 160)
@@ -17,6 +17,14 @@ void				scroll_up(int n)
 		*(video - 160 + i) = *(video + i);
 		i++;
 	}
+}
+
+void				clear_screen(void)
+{
+	unsigned char	*video = (unsigned char *)VIDEO_RAM;
+
+	while (video < (unsigned char *)VIDEO_RAM + SCREEN_MEM_SIZE)
+		*video++ = 0;
 }
 
 void				putchar(char c)
