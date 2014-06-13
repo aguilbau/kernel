@@ -4,12 +4,10 @@ unsigned char		g_cursor_x = 0;
 unsigned char		g_cursor_y = 0;
 unsigned char		g_cursor_attr = 0x0a;
 
-void				scroll_up(int n)
+void				scroll_up(void)
 {
-	int				i;
+	volatile int				i;
 	unsigned char	*video = (unsigned char *)VIDEO_RAM + 160;
-
-	(void)n;
 
 	i = 0;
 	while (i < SCREEN_MEM_SIZE - 160)
@@ -17,6 +15,8 @@ void				scroll_up(int n)
 		*(video - 160 + i) = *(video + i);
 		i++;
 	}
+	if (g_cursor_y > 0)
+		g_cursor_y--;
 }
 
 void				clear_screen(void)
@@ -29,7 +29,7 @@ void				clear_screen(void)
 
 void				putchar(char c)
 {
-	unsigned char	*video;
+	unsigned char	*video = (unsigned char *)0xb8000;
 
 	if (c == '\n')
 	{
@@ -47,10 +47,14 @@ void				putchar(char c)
 		*(video + 1) = g_cursor_attr;
 		g_cursor_x++;
 	}
-	if (g_cursor_x > 80)
+	if (g_cursor_x >= MAX_COLUMNS)
 	{
 		g_cursor_y++;
 		g_cursor_x = 0;
+	}
+	if (g_cursor_y >= MAX_ROWS)
+	{
+		scroll_up();
 	}
 }
 

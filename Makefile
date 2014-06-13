@@ -4,7 +4,7 @@ CC			=	gcc
 
 LDFLAGS		=	--oformat=binary -Ttext 1000 -melf_i386
 
-CFLAGS		=	-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -Werror -nostartfiles -nodefaultlibs -I./kernel/includes -O2
+CFLAGS		=	-m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -Wall -Wextra -Werror -nostartfiles -nodefaultlibs -I./kernel/includes -O3
 
 BOOT_SRCS	=	boot/gilbOS_boot.s
 
