@@ -27,3 +27,7 @@ kernel_cc: $(OBJS)
 boot_cc: $(BOOT_SRCS)
 	nasm -f bin $(BOOT_SRCS) -o boot.bin
 
+clean:
+	rm -f $(NAME) boot.bin kernel.bin $(OBJS)
+
+re: clean all

@@ -4,9 +4,19 @@ unsigned char		g_cursor_x = 0;
 unsigned char		g_cursor_y = 0;
 unsigned char		g_cursor_attr = 0x0a;
 
-void				scroll_up(unsigned char n)
+void				scroll_up(int n)
 {
-	(void)n;
+	int				i;
+
+	(void) n;
+	unsigned char	*video = (unsigned char *)VIDEO_RAM + 160;
+
+	i = 0;
+	while (i < SCREEN_MEM_SIZE - 160)
+	{
+		*(video - 160 + i) = *(video + i);
+		i++;
+	}
 }
 
 void				putchar(char c)
