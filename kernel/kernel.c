@@ -3,27 +3,18 @@
 void		_start(void)
 {
 	clear_screen();
-	putstr("cacadillac");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
-	putstr("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-	putstr("\nlolellol");
-	putstr("\nlolellol");
+	putstr("Loading new GDT..\n");
+	populate_gdt();
 
-	putstr("\nlolellol");
-	scroll_up();
-putstr("\nend");
+	asm("	movw $0x18, %ax	\n \
+			movw %ax, %ss \n \
+			movl $0x20000, %esp \n");
+	main();
+}
+
+void		main(void)
+{
+	putstr("GDT loaded.\n");
 	while (1)
 		;
 }
