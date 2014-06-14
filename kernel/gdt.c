@@ -1,16 +1,20 @@
 #include "gdt.h"
 #include "types.h"
+#include "stdfuns.h"
+
+t_gdt_descriptor		kernel_gdt[3];
+t_gdtr					kernel_gdtr;
 
 void		load_gdt_desc(uint32_t base, uint32_t limit,
-				uint8_t access, uint8_t flags, t_gdt_descriptor *gdt)
+				uint8_t access, uint8_t flags, t_gdt_descriptor *desc)
 {
-	gdt->limit_0_15 = (limit & 0xffff);
-	gdt->base_0_15 = (base & 0xffff);
-	gdt->limit_16_19 = (limit & 0xf0000) >> 16;
-	gdt->base_16_23 = (base & 0xff000) >> 16;
-	gdt->base_24_31 = (base & 0xff000000) >> 24;
-	gdt->access = access;
-	gdt->flags = (flags & 0xf);
+	desc->limit_0_15 = (limit & 0xffff);
+	desc->base_0_15 = (base & 0xffff);
+	desc->limit_16_19 = (limit & 0xf0000) >> 16;
+	desc->base_16_23 = (base & 0xff000) >> 16;
+	desc->base_24_31 = (base & 0xff000000) >> 24;
+	desc->access = access;
+	desc->flags = (flags & 0xf);
 }
 
 void		populate_gdt()
@@ -23,12 +27,14 @@ void		populate_gdt()
 	kernel_gdtr.limit = GDT_SIZE * 8;
 	kernel_gdtr.base = GDT_BASE;
 
-	asm("lgdtl (kgdtr)");
-	asm("movw $0x10, %ax	\n \
-		movw %ax, %ds		\n \
-		movw %ax, %es		\n \
-		movw %ax, %fs		\n \
-		movw %ax, %gs		\n \
-		ljmp $0x08, $next	\n \
-		next:				\n");
+	memcpy((void *)kernel_gdtr.base, (void *)kernel_gdt, kernel_gdtr.limit);
+
+	asm("lgdtl (kernel_gdtr)");
+	asm("movw $0x10, %ax	\r\n \
+		movw %ax, %ds		\r\n \
+		movw %ax, %es		\r\n \
+		movw %ax, %fs		\r\n \
+		movw %ax, %gs		\r\n \
+		ljmp $0x08, $next	\r\n \
+		next:				\r\n");
 }

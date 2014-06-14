@@ -7,6 +7,8 @@
 # define MAX_COLUMNS		80
 # define MAX_ROWS			25
 
+extern unsigned char g_cursor_y;
+
 void				scroll_up(void);
 void				putchar(char c);
 void				putstr(char *s);

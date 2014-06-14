@@ -23,14 +23,9 @@ typedef struct		s_gdtr
 	uint32_t		base;
 } __attribute__ ((packed)) t_gdtr;
 
-#  ifdef __GDT__
-t_gdt_descriptor		kernel_gdt[];
-t_gdtr					kernel_gdtr;
-
-#  else
-extern t_gdt_descriptor	kernel_gdt[];
+extern t_gdt_descriptor		kernel_gdt[3];
 extern t_gdtr			kernel_gdtr;
 
-# endif /* ! __GDT__ */
+void		populate_gdt();
 
 #endif /* ! GDT_H */
