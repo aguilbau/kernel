@@ -1,12 +1,16 @@
 #include "idt.h"
 #include "stdfuns.h"
-#include "interrupts.h"
+#include "interrupt.h"
 
-t_idt_descriptor	kernel_idt[];
-tidtr				kernel_idtr;
+t_idt_descriptor	kernel_idt[IDT_SIZE];
+t_idtr				kernel_idtr;
+
+void				int_default_wrapper(void);
+void				int_irq_0_wrapper(void);
+void				int_irq_1_wrapper(void);
 
 void			load_idt_descriptor(uint32_t offset, uint16_t selector,
-					uint8_t type_attr, t_idtr *desc)
+					uint8_t type_attr, t_idt_descriptor *desc)
 {
 	desc->offset_1 = (offset & 0xffff);
 	desc->offset_2 = (offset & 0x0000ffff) >> 16;
@@ -15,16 +19,15 @@ void			load_idt_descriptor(uint32_t offset, uint16_t selector,
 	desc->type_attr = type_attr;
 }
 
-void			populate_gdt()
+void			populate_idt(void)
 {
 	int			i;
-	uint32_t	default_interruption;
 
 	i = 0;
 	while (i < IDT_SIZE)
-		load_idt_descriptor((uint32_t)int_default, 0x08, INT_GATE, &kernel_idt[i++]);
-	load_idt_descriptor((uint32_t)int_irq_0, 0x08, INT_GATE, &kernel_idt[32]);
-	load_idt_descriptor((uint32_t)int_irq_1, 0x08, INT_GATE, &kernel_idt[33]);
+		load_idt_descriptor((uint32_t)int_default_wrapper, 0x08, INT_GATE, &kernel_idt[i++]);
+	load_idt_descriptor((uint32_t)int_irq_0_wrapper, 0x08, INT_GATE, &kernel_idt[32]);
+	load_idt_descriptor((uint32_t)int_irq_1_wrapper, 0x08, INT_GATE, &kernel_idt[33]);
 
 	kernel_idtr.limit = IDT_SIZE * 8;
 	kernel_idtr.base = IDT_BASE;

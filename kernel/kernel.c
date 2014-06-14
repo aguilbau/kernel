@@ -1,19 +1,27 @@
 #include "screen.h"
 #include "gdt.h"
+#include "pic.h"
+#include "idt.h"
 
-int		main(void);
+int			kernel_main(void);
 
 void		_start(void)
 {
 	clear_screen();
+
+	populate_idt();
+	putstr("new IDT loaded\n");
+	init_pic();
+	putstr("pic initiated\n");
+
 	populate_gdt();
-	asm("	movw $0x18, %ax	\n \
+	__asm__("	movw $0x18, %ax	\n \
 			movw %ax, %ss \n \
 			movl $0x20000, %esp \n");
-	main();
+	kernel_main();
 }
 
-int		main(void)
+int		kernel_main(void)
 {
 	putstr("GDT loaded.\n");
 	while (1)

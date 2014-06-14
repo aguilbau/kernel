@@ -45,8 +45,9 @@ typedef struct				s_idtr
 	uint32_t				base;
 } __attribute__ ((packed)) t_idtr;
 
-extern t_idt_descriptor		kernel_idt[];
+extern t_idt_descriptor		kernel_idt[IDT_SIZE];
 extern t_idtr				kernel_idtr;
 
+void			populate_idt(void);
 
 #endif /* !IDT_H */

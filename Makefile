@@ -11,7 +11,12 @@ BOOT_SRCS	=	boot/gilbOS_boot.s
 
 KERNEL_SRCS	=	kernel.c \
 				screen_output.c \
-				gdt.c
+				gdt.c \
+				pic.c \
+				idt.c \
+				c_interrupt.c
+
+KERNEL_S_SRCS =	interrupt.s
 
 KERNEL_CCS	=	$(addprefix kernel/, $(KERNEL_SRCS))
 
@@ -32,7 +37,8 @@ $(NAME): kernel_cc boot_cc
 	dd if=boot.bin count=4096 of=gilbOS.img conv=sync
 
 kernel_cc: $(KERNEL_OBJS) $(FUN_OBJS)
-	ld $(LDFLAGS) $^ -o kernel.bin
+	nasm -f elf kernel/s_interrupt.s
+	ld $(LDFLAGS) $^ kernel/s_interrupt.o -o kernel.bin
 
 boot_cc: $(BOOT_SRCS)
 	nasm -f bin $(BOOT_SRCS) -o boot.bin
